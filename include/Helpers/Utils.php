@@ -1,6 +1,6 @@
 <?php
 
-class Helpers {
+class Utils {
     public static function getImage($titre) {
         $images = "./assets/img/";
         $titre = strtolower($titre);

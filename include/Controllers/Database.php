@@ -10,8 +10,9 @@ class Database {
 
     public function getConnection() : PDO {
         $dsn = "mysql:host=$this->host;dbname=$this->dbname";
-        $this->pdo = new PDO($dsn, $this->root, $this->password);
-    }
+        $this->pdo = new PDO($dsn, $this->username, $this->password);
 
+        return $this->pdo;
+    }
 
 }

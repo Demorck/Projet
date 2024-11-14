@@ -1,8 +1,8 @@
 <?php 
     $title = "Home";
-    include_once("./include/header.php");
-    include_once("./include/Donnees.inc.php");
-    include_once("./include/Helpers.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/Donnees.inc.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/Helpers.php");
     
     ?>
 <body>
