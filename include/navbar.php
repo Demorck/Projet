@@ -1,8 +1,8 @@
 <nav>
     <ul>
-        <li><a href="index.php">Accueil</a></li>
-        <li><a href="index.php">Recettes</a></li>
-        <li><a href="index.php">Recherche</a></li>
-        <li><a href="index.php">Connexion</a></li>
+        <a href="index.php"><li class="active">Accueil</li></a>
+        <a href="index.php"><li>Recettes</li></a>
+        <a href="index.php"><li>Recherche</li></a>
+        <a href="index.php"><li>Connexion</li></a>
     </ul>
 </nav>
