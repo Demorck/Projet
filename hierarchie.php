@@ -3,6 +3,8 @@
     include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
     include_once($_SERVER['DOCUMENT_ROOT'] . "/include/Donnees.inc.php");
     
+
+    
     ?>
 <body>
     <?php include_once("./include/navbar.php"); ?>

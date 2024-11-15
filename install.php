@@ -13,9 +13,9 @@ if (isset($_POST["install"])) {
         $install->insertAliments();
         $install->insertHierarchie();
 
-        echo "Installation terminée";
+        $finished = "Installation terminée";
     } catch (PDOException $e) {
-        echo "Erreur d'installation: " . $e->getMessage();
+        $finished = "Erreur d'installation: " . $e->getMessage();
     } finally {
         $install = null;
         $_POST = [];
@@ -27,6 +27,7 @@ if (isset($_POST["install"])) {
     <?php include_once("./include/navbar.php"); ?>
     <h2>Les recettes du moment</h2>
     <div class="wrapper-recettes flex flex-wrap flex-row gap-4 items-end justify-center">
+        <p><?php if(isset($install)) echo $install?></p>
         <form action="#" method="post">
             <button type="submit" name="install">Installer</button>
         </form>

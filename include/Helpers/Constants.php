@@ -1,17 +1,19 @@
 <?php
 
+namespace App\Helpers;
 
 class Constants {
-    public static string $SITE_ROOT = "http://localhost/";
+    const SITE_ROOT = "http://localhost/";
 
-    public static string $DB_HOST = "localhost";
-    public static string $DB_NAME = "recettes";
-    public static string $DB_USERNAME = "root";
-    public static string $DB_PASSWORD = "";
+    const DB_HOST = "localhost";
+    
+    const DB_NAME = "recettes";
+    const DB_USERNAME = "root";
+    const DB_PASSWORD = "";
 
-    public static Array $DB_TABLES = ["aliments", "hierarchie"];
+    const DB_TABLES = ["aliments", "hierarchie"];
 
-    public static Array $SQL_TABLES = [
+    const SQL_TABLES = [
         "CREATE TABLE aliments (
             id_aliment INT AUTO_INCREMENT PRIMARY KEY,
             nom VARCHAR(255) NOT NULL
