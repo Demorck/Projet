@@ -2,25 +2,22 @@
     use App\Controllers\Database as Database;
     
     $title = "Home";
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/Donnees.inc.php");
-    
-
-
     $db = new Database();
     $pdo = $db->getConnection();
+    $db->connectToDatabase();
 
-    $sql = "SELECT id_super FROM hierarchie WHERE id_super IN (SELECT id_aliment FROM aliments WHERE nom_aliment = :nom_aliment)";
+    $sql = "SELECT id_sous FROM hierarchie WHERE id_super IN (SELECT id_aliment FROM aliments WHERE nom = 'Aliment')";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(":nom_aliment", "Aliment");
+    // $stmt->bindParam(":nom_aliment", "Aliment");
     $stmt->execute();
 
     $hierarchie = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    print_r($hierarchie);
+    var_dump($hierarchie);
 
+    require_once __DIR__ . "/template/header.php";
     ?>
 <body>
-    <?php include_once("./include/navbar.php"); ?>
+    <?php require_once __DIR__ . "/template/navbar.php"; ?>
     <h2>Les recettes du moment</h2>
     <div class="wrapper-recettes flex flex-wrap flex-row gap-4 items-end justify-center">
         

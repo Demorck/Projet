@@ -1,8 +1,15 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT'] . "/include/Controllers/Database.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/include/Helpers/Constants.php");
+namespace App\Helpers;
 
+use App\Helpers\Constants as Constants;
+use App\Controllers\Database as Database;
+use \PDO;
+
+/**
+ * Class InstallDatabase qui permet d'installer la base de données de zéro
+ * 
+ */
 class InstallDatabase {
 
     private Database $database;
@@ -10,9 +17,11 @@ class InstallDatabase {
     private Array $hierarchie;
     private Array $recettes;
 
-
+    /**
+     * Constructeur de la classe InstallDatabase
+     */
     public function __construct() {
-        $this->database = new Database("localhost", "recettes", "root", "");
+        $this->database = new Database();
         $this->pdo = $this->database->getConnection();
         include_once($_SERVER['DOCUMENT_ROOT'] . "/include/Donnees.inc.php");
         
@@ -20,20 +29,52 @@ class InstallDatabase {
         $this->recettes = $Recettes;
     }
 
-    public function dropTables() {
-        foreach(Constants::$DB_TABLES as $table) {
-            $sql = "DROP TABLE IF EXISTS $table";
-            $this->pdo->exec($sql);
+    /**
+     * Installation complète de la base de données
+     *
+     */
+    public function fullInstall() {
+        $this->dropDatabase(Constants::DB_NAME);
+        $this->createDatabase(Constants::DB_NAME);
+        $this->database->connectToDatabase();
+
+        $this->dropTables();
+        $this->createTables();
+
+        $this->insertAliments();
+        $this->insertHierarchie();
+
+        $this->database->closeConnection();
+    }
+
+    private function dropDatabase(string $name) {
+        $sql = "DROP DATABASE IF EXISTS $name";
+        $this->pdo->exec($sql);
+    }
+
+    private function createDatabase(string $name) {
+        $sql = "CREATE DATABASE IF NOT EXISTS $name CHARACTER SET utf8mb4";
+        $this->pdo->exec($sql);
+    }
+
+    private function dropTables(bool $force = false) {
+        foreach(Constants::DB_TABLES as $table) {
+            if ($force)
+                $sql = "DROP TABLE $table";
+            else
+                $sql = "DROP TABLE IF EXISTS $table";
+       
+                $this->pdo->exec($sql);
         }	
     }
 
-    public function createTables() {
-        foreach(Constants::$SQL_TABLES as $sql) {
+    private function createTables() {
+        foreach(Constants::SQL_TABLES as $sql) {
             $this->pdo->exec($sql);
         }
     }
 
-    public function insertAliments() {
+    private function insertAliments() {
         foreach ($this->hierarchie as $key => $aliment) {    
             $sql = "INSERT INTO aliments (nom) VALUES (:nom)";
             $stmt = $this->pdo->prepare($sql);
@@ -41,7 +82,7 @@ class InstallDatabase {
         }
     }
 
-    public function insertHierarchie() {
+    private function insertHierarchie() {
         foreach ($this->hierarchie as $key => $aliment) {    
             if (isset($aliment["sous-categorie"]))
             {

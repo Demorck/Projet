@@ -1,29 +1,17 @@
 <?php
-    require($_SERVER['DOCUMENT_ROOT'] . "autoload.php");    
-    
-    include($_SERVER['DOCUMENT_ROOT'] . "/views/hierarchie_tabs.php");
-    ?>
+
+require_once $_SERVER['DOCUMENT_ROOT'] . "/autoload.php";
+
+use App\Router\Router;
+
+$router = new Router($_SERVER['REQUEST_URI']);
 
 
-<!-- <body>
-    <?php include_once("./include/navbar.php"); ?>
-    <h2>Les recettes du moment</h2>
-    <div class="wrapper-recettes flex flex-wrap flex-row gap-4 items-end justify-center">
-        <?php
-        foreach ($Recettes as $recette) {
-            ?>
-            <div class="recette flex flex-col w-1/6">
-                <h3><?php echo $recette["titre"]; ?></h3>
-                <img src="<?php echo Helpers::getImage($recette["titre"]); ?>">
-                <!-- <p><?php echo $recette["ingredients"]; ?></p>s 
-            </div>
+$router->get('/', App\Controllers\HomeController::class, 'index');
 
-            <?php
-        } ?>
-    </div>
-    <footer>
-        <p>&copy; 2024 - Recettes de cuisine</p>
-    </footer>
-</body>
-</html> -->
+$router->get('/install', App\Controllers\InstallDatabaseController::class, 'index');
+$router->post('/install', App\Controllers\InstallDatabaseController::class, 'installDatabase');
 
+$router->get('/hierarchie', App\Controllers\HierarchieController::class, 'index');
+
+$router->run();
