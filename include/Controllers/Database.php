@@ -98,7 +98,7 @@ class Database {
      * Ferme la connexion à la base de données
      */
     public function closeConnection() {
-        $this->pdo = null;
+        // $this->pdo = null;
     }
 
 }
