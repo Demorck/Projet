@@ -5,7 +5,6 @@
 ?>
 <body>
     <?php require_once __DIR__ . "/template/navbar.php"; ?>
-    <h2>test</h2>
     <div class="wrapper-recettes flex flex-wrap flex-row gap-4 items-end justify-center">
 
 <!--
@@ -31,7 +30,7 @@ obligatoires = login + mdp
 
     </fieldset>
 
-    <input type="submit" value="Valider" name="submit" >
+    <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" value="Valider" name="submit" >
             
     </form>
 

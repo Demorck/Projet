@@ -21,7 +21,7 @@ class InstallDatabaseController {
         
                 echo "Installation terminée";
             } catch (PDOException $e) {
-                echo "Erreur d'installation: " . $e->getMessage();
+                echo "Erreur d'installation: <br>" . $e->getMessage();
             } finally {
                 $install = null;
                 $_POST = [];

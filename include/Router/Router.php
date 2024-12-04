@@ -29,7 +29,8 @@ class Router {
      * @param string $url
      */
     public function __construct($url) {
-        $this->url = trim($url, '/');
+        $this->url = parse_url($url, PHP_URL_PATH);
+        $this->url = trim($this->url, '/');
     }
 
     /**

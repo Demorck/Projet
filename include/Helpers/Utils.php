@@ -13,7 +13,7 @@ class Utils {
      * @param string $titre
      * @return string le chemin de l'image
      */
-    public static function getImage($titre) {
+    public static function getImage($titre): string {
         $images = "./assets/img/";
         $titre = strtolower($titre);
         $titre = ucfirst($titre);

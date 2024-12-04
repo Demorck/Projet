@@ -4,7 +4,9 @@ namespace App\Helpers;
 
 use App\Helpers\Constants as Constants;
 use App\Controllers\Database as Database;
+use Exception;
 use \PDO;
+use PDOException;
 
 /**
  * Class InstallDatabase qui permet d'installer la base de données de zéro
@@ -34,17 +36,21 @@ class InstallDatabase {
      *
      */
     public function fullInstall() {
-        $this->dropDatabase(Constants::DB_NAME);
-        $this->createDatabase(Constants::DB_NAME);
-        $this->database->connectToDatabase();
+        try {
+            $this->dropDatabase(Constants::DB_NAME);
+            $this->createDatabase(Constants::DB_NAME);
+            $this->database->connectToDatabase();
 
-        $this->dropTables();
-        $this->createTables();
+            $this->dropTables();
+            $this->createTables();
 
-        $this->insertAliments();
-        $this->insertHierarchie();
+            $this->insertAliments();
+            $this->insertHierarchie();
 
-        $this->database->closeConnection();
+            $this->database->closeConnection();
+        } catch (\PDOException $e) {
+            throw new PDOException("Install database error: <br>" . $e->getMessage());
+        }
     }
 
     private function dropDatabase(string $name) {
@@ -53,7 +59,7 @@ class InstallDatabase {
     }
 
     private function createDatabase(string $name) {
-        $sql = "CREATE DATABASE IF NOT EXISTS $name CHARACTER SET utf8mb4";
+        $sql = "CREATE DATABASE IF NOT EXISTS $name CHARACTER SET utf8";
         $this->pdo->exec($sql);
     }
 
@@ -70,7 +76,11 @@ class InstallDatabase {
 
     private function createTables() {
         foreach(Constants::SQL_TABLES as $sql) {
-            $this->pdo->exec($sql);
+            try {
+                $this->pdo->exec($sql);
+            } catch (\PDOException $e) {
+                throw new PDOException("Install  database, create tables (" . $sql . ") error: <b>" . $e->getMessage() . "</b>");
+            }
         }
     }
 
