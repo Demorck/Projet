@@ -13,5 +13,7 @@ $router->get('/install', App\Controllers\InstallDatabaseController::class, 'inde
 $router->post('/install', App\Controllers\InstallDatabaseController::class, 'installDatabase');
 
 $router->get('/hierarchie', App\Controllers\HierarchieController::class, 'index');
+$router->get('/connection', App\Controllers\ConnectionController::class, 'index');
+$router->post('/register', App\Controllers\ConnectionController::class, 'register');
 
 $router->run();
