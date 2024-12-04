@@ -10,8 +10,8 @@
         <?php
         foreach ($Recettes as $recette) {
             ?>
-            <div class="recette flex flex-col w-1/6">
-                <h3><?php echo $recette["titre"]; ?></h3>
+            <div class="text-xs flex-col w-3/6">
+                <h3 class="font-bold"><?php echo $recette["titre"]; ?></h3>
                 <p><?php echo $recette["ingredients"]; ?></p>s 
             </div>
 
