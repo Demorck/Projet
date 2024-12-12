@@ -58,7 +58,7 @@ class ConnectionController {
         $stmt->bindParam(':nom', $_POST['last_name']);
         $stmt->bindParam(':prenom', $_POST['first_name']);
         $stmt->bindParam(':genre', $_POST['gender']);
-        $stmt->bindParam(':email', $_POST['last_name']);
+        $stmt->bindParam(':email', $_POST['email']);
         $stmt->execute();
     }
 

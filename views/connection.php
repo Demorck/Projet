@@ -25,7 +25,7 @@ obligatoires = login + mdp
                 <input type="radio" name="gender" value="f"> Femme
                 <input type="radio" name="gender" value="v"> Autre/ne se prononce pas
         <br >
-        Email : ? <br> 
+        Email : <input type="email" id="email" name="email"> <br>
         Adresse <br>
 
     </fieldset>
