@@ -3,6 +3,11 @@
 
     require_once $_SERVER['DOCUMENT_ROOT'] . "/include/Donnees.inc.php";
 ?>
+<!-- 
+login mdp nom prénom sexe (homme ou femme), adresse électronique, date de naissance,
+adresse postale (décomposée en adresse, code postal et ville) et numéro de téléphone
+obligatoires = login + mdp
+-->
 <body>
     <?php require_once __DIR__ . "/template/navbar.php"; ?>
 
@@ -40,9 +45,7 @@
                 
                 <fieldset>
                     
-                    login mdp nom prénom sexe (homme ou femme), adresse électronique, date de naissance,
-                    adresse postale (décomposée en adresse, code postal et ville) et numéro de téléphone
-                    obligatoires = login + mdp
+
                     
                     <legend>Informations personnelles</legend>
                     <br>
