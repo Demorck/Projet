@@ -15,5 +15,6 @@ $router->post('/install', App\Controllers\InstallDatabaseController::class, 'ins
 $router->get('/hierarchie', App\Controllers\HierarchieController::class, 'index');
 $router->get('/connection', App\Controllers\ConnectionController::class, 'index');
 $router->post('/register', App\Controllers\ConnectionController::class, 'register');
+$router->post('/login', App\Controllers\ConnectionController::class, 'login');
 
 $router->run();

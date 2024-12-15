@@ -6,6 +6,7 @@
     <title><?php
         if (isset($title)) echo $title;
         else echo "Document sans titre"; ?></title>
+    <?php if (isset($script)) echo "<script src=".$script."></script>"; ?> 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/style.css">
 </head>

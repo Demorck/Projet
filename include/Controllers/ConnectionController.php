@@ -8,6 +8,7 @@ use App\Controllers\Database;
 class ConnectionController {
     public function index() {
         $data = ['title' => 'Connexion'];
+        $data = ['script' => 'js/connection.js'];
 
         View::render('connection', $data);
     }
@@ -24,6 +25,17 @@ class ConnectionController {
 
         View::render('connection', $data);
 
+    }
+
+    public function login(){
+        $data = ['title' => 'Login'];
+        
+        if($this->checkUser()){
+            $data['erreur'] = 'Utilisateur existant';
+        } else {
+            $this->loginUser();
+            $data['succès'] = 'Utilisateur loginé';
+        }
     }
 
     private function checkUser(){
