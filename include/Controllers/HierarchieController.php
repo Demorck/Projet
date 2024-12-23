@@ -23,7 +23,7 @@ class HierarchieController {
         $data['hierarchie'] = $array;
 
 
-        View::render('hierarchie_tabs', $data);
+        View::render('rechercher', $data);
     }
 
     private function createHierarchie(PDO $pdo, int $id_super): array {

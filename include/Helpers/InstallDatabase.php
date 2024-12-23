@@ -46,6 +46,8 @@ class InstallDatabase {
 
             $this->insertAliments();
             $this->insertHierarchie();
+            $this->insertRecettes();
+            $this->insertIngredients();
 
             $this->database->closeConnection();
         } catch (\PDOException $e) {
@@ -112,6 +114,40 @@ class InstallDatabase {
                     $stmt->execute([":id_super" => $resSuper["id_aliment"], ":id_sous" => $resSous["id_aliment"]]);
                 }
             }
+        }
+    }
+
+    private function insertRecettes() {
+        foreach ($this->recettes as $recette) {
+            $sql = "INSERT INTO recettes (nom, description, ingredients) VALUES (:nom, :description, :ingredients)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([":nom" => $recette["titre"], ":description" => $recette["preparation"], ":ingredients" => $recette["ingredients"]]);
+        }
+    }
+
+    private function insertIngredients() {
+        try {
+            foreach ($this->recettes as $recette) {
+                $ingredients = array_unique($recette["index"]);
+                var_dump($ingredients);
+                foreach ($ingredients as $ingredient) {
+                    $sqlRecette = "SELECT id_recette FROM recettes WHERE nom = :nom";
+                    $stmt = $this->pdo->prepare($sqlRecette);
+                    $stmt->execute([":nom" => $recette["titre"]]);
+                    $resRecette = $stmt->fetchAll()[0];
+
+                    $sqlIngredient = "SELECT id_aliment FROM aliments WHERE nom = :nom";
+                    $stmt = $this->pdo->prepare($sqlIngredient);
+                    $stmt->execute([":nom" => $ingredient]);
+                    $resIngredient = $stmt->fetchAll()[0];
+
+                    $sql = "INSERT INTO ingredients (id_recette, id_aliment) VALUES (:id_recette, :id_aliment)";
+                    $stmt = $this->pdo->prepare($sql);
+                    $stmt->execute([":id_recette" => $resRecette["id_recette"], ":id_aliment" => $resIngredient["id_aliment"]]);
+                }
+            }
+        } catch (\PDOException $e) {
+            throw new PDOException("Install database, insert ingredients error: <b>" . $e->getMessage() . "</b>");
         }
     }
 }
