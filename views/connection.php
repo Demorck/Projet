@@ -25,7 +25,7 @@ obligatoires = login + mdp
 
         <div id="connectionDiv" >
 
-        <form action="/login" method="post" >
+        <form id='loginForm' action="/login" method="post" >
             
             <fieldset>
             
@@ -40,8 +40,7 @@ obligatoires = login + mdp
     
         </form>
 
-<!--
-            <form action="/register" method="post">
+            <form id='registerForm' class="hidden" action="/register" method="post">
                 
                 <fieldset>
                     
@@ -66,7 +65,6 @@ obligatoires = login + mdp
                 <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" value="Valider" name="submit" >
         
             </form>
--->
         </div>
 
     </div>
