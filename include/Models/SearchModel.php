@@ -76,7 +76,10 @@ class SearchModel {
         $excludedIds = $this->getAllIngredients($excluded);
     
         if (empty($includedIds)) {
-            return [];
+            $query = "SELECT * FROM recettes";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     
 
@@ -142,5 +145,20 @@ class SearchModel {
         ");
         $stmt->execute(["%$term%"]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function searchId($name) {
+        $stmt = $this->pdo->prepare("
+            SELECT a.id_aliment, a.nom,
+                (SELECT GROUP_CONCAT(a2.nom SEPARATOR ' > ')
+                 FROM aliments a2
+                 JOIN hierarchie h ON h.id_super = a2.id_aliment
+                 WHERE h.id_sous = a.id_aliment
+                 ORDER BY h.id_super) as path
+            FROM aliments a
+            WHERE a.nom = ?
+        ");
+        $stmt->execute([$name]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

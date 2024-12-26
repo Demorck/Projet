@@ -15,7 +15,7 @@ nav ul {
     display: flex;
     list-style: none;
     justify-content: space-between;
-    background-color: red;
+    background-color: rgb(167, 52, 52);
     width: 100%;
     padding: 0 20px;
 }
@@ -29,6 +29,10 @@ nav ul li.active {
     background-color: #333;
 }
 
+nav ul li:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
 nav ul a {
     text-decoration: none;
     color: white;
@@ -36,7 +40,6 @@ nav ul a {
     text-align: center;
 }
 
-/* /assets/css/style.css */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -49,7 +52,6 @@ nav ul a {
 
 .search-box {
     position: relative;
-    margin-bottom: 20px;
 }
 
 #searchInput {
@@ -69,6 +71,7 @@ nav ul a {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     display: none;
     z-index: 1000;
+    top: 3em;
 }
 
 .suggestion-item {
@@ -103,7 +106,7 @@ nav ul a {
     color: #d32f2f;
 }
 
-.remove-tag {
+.remove-tag, .move-tag {
     margin-left: 8px;
     cursor: pointer;
     font-weight: bold;

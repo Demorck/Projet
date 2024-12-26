@@ -46,9 +46,6 @@ obligatoires = login + mdp
             <form id='registerForm' class="hidden" action="/register" method="post">
                 
                 <fieldset>
-                    
-
-                    
                     <legend>Informations personnelles</legend>
                     <br>
                     Login : <br> <input type="text" name="login" required="required" class="w-full focus:scale-105 duration-300 border border-gray-400"><br><br>   

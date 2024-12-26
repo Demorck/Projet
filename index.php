@@ -16,9 +16,11 @@ $router->get('/rechercher', App\Controllers\HierarchieController::class, 'index'
 $router->get('/recherche', App\Controllers\SearchController::class, 'index');
 
 $router->get('/search/searchIngredients', App\Controllers\SearchController::class, 'searchIngredients');
+$router->get('/search/hierarchy', App\Controllers\SearchController::class, 'getHierarchie');
 $router->post('/search/searchRecipes', App\Controllers\SearchController::class, 'searchRecipes');
+$router->post('/search/id', App\Controllers\SearchController::class, 'searchId');
 
-$router->get('/connection', App\Controllers\ConnectionController::class, 'index');
+$router->get('/login', App\Controllers\ConnectionController::class, 'index');
 $router->post('/register', App\Controllers\ConnectionController::class, 'register');
 $router->post('/login', App\Controllers\ConnectionController::class, 'login');
 

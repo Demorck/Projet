@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Helpers\View;
 use App\Models\SearchModel;
+use App\Models\HierarchieModel;
 
 /**
  * Class SearchController
@@ -17,7 +18,8 @@ class SearchController {
 
     public function index() {
         $data = ['title' => 'Rechercher'];
-        View::render('test', $data);
+
+        View::render('recherche', $data);
     }
 
     public function searchIngredients() {
@@ -33,5 +35,19 @@ class SearchController {
         
         header('Content-Type: application/json');
         echo json_encode($this->model->searchRecipes($included, $excluded));
+    }
+    
+    public function searchId() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $name = $data['name'] ?? 0;
+
+        header('Content-Type: application/json');
+        echo json_encode($this->model->searchId($name));
+    }
+
+    public function getHierarchie() {
+        $hierarchieModel = new HierarchieModel();
+        header('Content-Type: application/json');
+        echo json_encode($hierarchieModel->getHierarchie());
     }
 }

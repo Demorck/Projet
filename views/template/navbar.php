@@ -1,8 +1,12 @@
 <nav>
     <ul>
         <a href="/"><li class="active">Accueil</li></a>
-        <a href="/rechercher"><li>Recherche</li></a>
-        <a href="index.php"><li>Recettes</li></a>
-        <a href="/connection"><li>Connexion</li></a>
+        <a href="/recherche"><li>Recherche des recettes</li></a>
+        <?php
+            if (isset($_SESSION['user'])) {
+                echo '<a href="/panier"><li>Mon panier</li></a>';
+            }
+        ?>
+        <a href="/login"><li>Connexion</li></a>
     </ul>
 </nav>
