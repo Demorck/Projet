@@ -8,19 +8,22 @@ use App\Controllers\Database;
 class ConnectionController {
     public function index() {
         $data = ['title' => 'Connexion'];
-        $data = ['script' => 'js/connection.js'];
+        $data += ['script' => 'js/connection.js'];
 
         View::render('connection', $data);
     }
 
     public function register(){
-        $data = ['title' => 'Register'];
+        $data = ['title' => 'Connexion'];
+        $data += ['script' => 'js/connection.js'];
 
         if($this->checkUser()){
-            $data['erreur'] = 'Utilisateur existant';
+            $data += ['code' => 401];
+            $data += ['error' => 'Utilisateur déjà existant'];
         } else {
             $this->registerUser();
-            $data['succès'] = 'Utilisateur créé';
+            $data += ['code' => 200];
+            $data += ['success' => 'Utilisateur créé avec succès'];
         }
 
         View::render('connection', $data);
@@ -28,14 +31,43 @@ class ConnectionController {
     }
 
     public function login(){
-        $data = ['title' => 'Login'];
+        $data = ['script' => 'js/connection.js'];
         
-        if($this->checkUser()){
-            $data['erreur'] = 'Utilisateur existant';
+        if($this->loginUser()){
+            $data += ['title' => 'Accueil'];
+            $data += ['code' => 200];
+            $data += ['success' => 'Connexion réussie'];
+
+            session_start();
+            $_SESSION['login'] = $_POST['login'];
+            View::render('homepage', $data);
+
         } else {
-            $this->loginUser();
-            $data['succès'] = 'Utilisateur loginé';
+            $data += ['title' => 'Connexion'];
+            $data += ['code' => 401];
+            $data += ['error' => 'Identifiants incorrects'];
+            
+            View::render('connection', $data);
         }
+
+    }
+
+    public function disconnect(){
+        session_start();
+        session_destroy();
+        header('Location: /');
+    }
+    
+    public function getSession(){
+        session_start();
+        if(isset($_SESSION['login'])){
+            $data = ['code' => 200];
+            $data += ['login' => $_SESSION['login']];
+        } else {
+            $data = ['code' => 401];
+        }
+
+        echo json_encode($data);
     }
 
     private function checkUser(){
@@ -79,7 +111,7 @@ class ConnectionController {
         $pdo = $db->getConnection();
         $db->connectToDatabase();
 
-        $sql = "SELECT * FROM users WHERE login = :login";
+        $sql = "SELECT * FROM utilisateurs WHERE login = :login";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':login', $_POST['login']);
         $stmt->execute();

@@ -129,7 +129,7 @@ class InstallDatabase {
         try {
             foreach ($this->recettes as $recette) {
                 $ingredients = array_unique($recette["index"]);
-                var_dump($ingredients);
+                
                 foreach ($ingredients as $ingredient) {
                     $sqlRecette = "SELECT id_recette FROM recettes WHERE nom = :nom";
                     $stmt = $this->pdo->prepare($sqlRecette);

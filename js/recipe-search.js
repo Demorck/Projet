@@ -12,7 +12,9 @@ class RecipeSearch {
         this.changeSearch = document.getElementById('change-search');
         this.includedIngredients = [];
         this.excludedIngredients = [];
+        this.alreadyLiked = [];
         this.hierarchy = {};
+        this.session = {};
         this.init();
     }
 
@@ -23,10 +25,17 @@ class RecipeSearch {
     async init() {
         await this.fetchHierarchy();
         this.setupEventListeners();
-        await this.updateResults();
-        
-        
+        let res = await this.ifSession();
+        this.session.start = res.code == 200;
+        this.session.user = res.login;
 
+        let fav = await this.getFavorites();
+        fav.forEach((f) => {
+            this.alreadyLiked.push(f.id_recette);
+        });
+        
+        
+        await this.updateResults();
         const testDiv = document.getElementById('test');
         this.generateHierarchy(this.hierarchy, testDiv);
 
@@ -178,6 +187,18 @@ class RecipeSearch {
         });
     }
 
+    async getFavorites() {
+        const response = await fetch('/favorite/get', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user: this.session.user
+            })
+        });
+
+        return await response.json();
+    }
+
     async addIngredient(id, name, type) {
         if (type === 'included') {
             this.includedIngredients.push({ id_aliment: id, name });
@@ -283,6 +304,47 @@ class RecipeSearch {
         resultsDiv.innerHTML = recipes
             .map(recipe => this.generateRecipeCard(recipe))
             .join('');
+
+        const favoriteDiv = document.querySelectorAll('.favorite input[type="checkbox"]');
+        favoriteDiv.forEach((favorite) => {
+            favorite.addEventListener('change', (e) => {
+                let id = e.target.id.split('-')[1];
+                
+                if (e.target.checked) {
+                    this.addFavorite(id);
+                } else {
+                    this.removeFavorite(id);
+                }
+            });
+        });
+        
+    }
+
+    async addFavorite(id) {
+        const response = await fetch('/favorite/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: parseInt(id),
+                user: this.session.user
+            })
+        });
+    }
+
+    async removeFavorite(id) {
+        const response = await fetch('/favorite/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: parseInt(id),
+                user: this.session.user
+            })
+        });
+    }
+
+    async ifSession() {
+        const response = await fetch('/session');
+        return await response.json();
     }
 
     generateTags(ingredients, type) {
@@ -306,14 +368,26 @@ class RecipeSearch {
             recipe.total_ingredients = 1;
             recipe.matched_ingredients = 1;
         }
+
+        let str = `<div class="recipe-card relative">
+                        <h3>${recipe.nom}</h3>
+                        <p>Score: ${(recipe.matched_ingredients / recipe.total_ingredients * 100).toFixed(1)}%</p>
+                        <p class="description">${recipe.description}</p>`;
         
-        return `
-            <div class="recipe-card">
-                <h3>${recipe.nom}</h3>
-                <p>Score: ${(recipe.matched_ingredients / recipe.total_ingredients * 100).toFixed(1)}%</p>
-                <p class="description">${recipe.description}</p>
-            </div>
-        `;
+        if (this.session.start) {
+            str += `<span class="favorite absolute flex flex-row">
+                        <input type="checkbox" id="recipe-${recipe.id_recette}" name="recipe-${recipe.id_recette}" class="hidden" ${this.alreadyLiked.includes(recipe.id_recette) ? 'checked' : ''}>
+                        <label for="recipe-${recipe.id_recette}" class="w-6 h-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32c-5.15-4.67-8.55-7.75-8.55-11.53 0-3.08 2.42-5.5 5.5-5.5 1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54l-1.45 1.31z"/>
+                            </svg>
+                        </label>
+                    </span>`;
+        }
+        
+        str += `</div>`;
+
+        return str;
     }
 
     generateHierarchy(hierarchy, parentElement) {

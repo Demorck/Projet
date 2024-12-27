@@ -1,7 +1,5 @@
 <?php 
-    use App\Helpers\Utils;
     require_once __DIR__ . "/template/header.php";
-    require_once $_SERVER['DOCUMENT_ROOT'] . "/include/Donnees.inc.php";
     ?>
     <style>
         .hierarchy {
@@ -17,8 +15,6 @@
 <body>
     <?php require_once __DIR__ . "/template/navbar.php"; ?>
     <div class="container">
-        <h1>Recherche de Recettes</h1>
-        
         <div id="recipe-search" class="search-container flex flex-row gap-10 items-start">
             <div id="test">
 

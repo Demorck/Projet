@@ -9,6 +9,7 @@ nav {
     justify-content: space-between;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
 nav ul {
@@ -124,4 +125,39 @@ nav ul a {
 .recipe-card h3 {
     margin-top: 0;
     color: #333;
+}
+
+.favorite input + label svg {
+    fill:rgb(126, 126, 126);
+    cursor: pointer;
+}
+
+.favorite input:checked + label svg {
+    fill:rgb(220, 72, 127);
+}
+
+.favorite {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.error {
+    color: #ddd;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border: 1px solid #d32f2f;
+    padding: 10px;
+    background-color: #d32f2f;
+    border-radius: 1em;
+}
+
+.success {
+    color: #ddd;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border: 1px solid #388e3c;
+    padding: 10px;
+    background-color: #388e3c;
+    border-radius: 1em;
 }
