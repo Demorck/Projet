@@ -35,6 +35,9 @@ class Constants {
             prenom VARCHAR(255),
             genre ENUM('h', 'f', 'v'),
             email VARCHAR(255),
+            adresse VARCHAR(255),
+            code_postal VARCHAR(6),
+            ville VARCHAR(255),
             date_inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
         )",
@@ -56,8 +59,8 @@ class Constants {
             id_favoris INT AUTO_INCREMENT PRIMARY KEY,
             id_utilisateur INT NOT NULL,
             id_recette INT NOT NULL,
-            FOREIGN KEY (id_utilisateur) REFERENCES users(id_utilisateur),
-            FOREIGN KEY (id_recette) REFERENCES recipes(id_recette)
+            FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id_utilisateur),
+            FOREIGN KEY (id_recette) REFERENCES recettes(id_recette)
         );"
     ];
 }

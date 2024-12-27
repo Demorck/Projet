@@ -19,13 +19,16 @@ class InstallDatabaseController {
                 $install = new InstallDatabase();
                 $install->fullInstall();
         
-                echo "Installation terminée";
+                $data["success"] = "Installation terminée";
             } catch (PDOException $e) {
-                echo "Erreur d'installation: <br>" . $e->getMessage();
+                $data["error"] = "Erreur d'installation: <br>" . $e->getMessage();
             } finally {
                 $install = null;
                 $_POST = [];
             }
         }
+
+        $data += ['title' => 'Install database'];
+        View::render('install', $data);
     }
 }

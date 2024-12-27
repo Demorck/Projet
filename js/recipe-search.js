@@ -369,11 +369,28 @@ class RecipeSearch {
             recipe.matched_ingredients = 1;
         }
 
-        let str = `<div class="recipe-card relative">
-                        <h3>${recipe.nom}</h3>
-                        <p>Score: ${(recipe.matched_ingredients / recipe.total_ingredients * 100).toFixed(1)}%</p>
-                        <p class="description">${recipe.description}</p>`;
+        console.log(recipe);
         
+        let score = (recipe.matched_ingredients / recipe.total_ingredients * 100).toFixed(1);
+        let oneToTen = 10 - Math.round(score / 10);
+
+        let str = `<div class="recipe-card relative border-color-range-${oneToTen} items-center flex flex-row gap-4">
+                        <div class="recipe-image">
+                            <img src="${recipe.image}" alt="${recipe.nom}" class="w-full h-24 md:h-48 object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col gap-2 p-4">
+                            <h3 class="text-xl font-bold">${recipe.nom}</h3>
+                            <p class="italic text-xs">Score: ${score}%</p>
+                            <p class="description">${recipe.description}</p>
+                            <p class="ingrédients"><span class="font-bold underline">Ingrédients:</span>&nbsp;`;
+        
+                        recipe.aliments.forEach(e => {
+                            str += ` ${e}, `;
+                        });
+
+        str = str.slice(0, -2);
+        str += `</p>`;
+
         if (this.session.start) {
             str += `<span class="favorite absolute flex flex-row">
                         <input type="checkbox" id="recipe-${recipe.id_recette}" name="recipe-${recipe.id_recette}" class="hidden" ${this.alreadyLiked.includes(recipe.id_recette) ? 'checked' : ''}>
@@ -385,7 +402,7 @@ class RecipeSearch {
                     </span>`;
         }
         
-        str += `</div>`;
+        str += `</div></div>`;
 
         return str;
     }
@@ -533,7 +550,7 @@ class RecipeSearch {
             if (score <= 0) {
                 recette.style.display = 'none';
             } else {
-                recette.style.display = 'block';
+                recette.style.display = 'flex';
             }
         });
     

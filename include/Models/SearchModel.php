@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Controllers\Database;
+use App\Helpers\Utils;
 use PDO;
 
 /**
@@ -76,10 +77,15 @@ class SearchModel {
         $excludedIds = $this->getAllIngredients($excluded);
     
         if (empty($includedIds)) {
-            $query = "SELECT * FROM recettes";
+            $query = "SELECT r.* FROM recettes r";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $res = $this->addIngredients($res);
+            $res = $this->addImagePath($res);
+
+            return $res;
         }
     
 
@@ -87,12 +93,13 @@ class SearchModel {
         $excludedPlaceholders = !empty($excludedIds) ? implode(',', array_fill(0, count($excludedIds), '?')) : null;
     
         $query = "
-            SELECT r.*, 
+            SELECT r.*,
                 COUNT(DISTINCT CASE WHEN i.id_aliment IN ($includedPlaceholders) 
                     THEN i.id_aliment END) as matched_ingredients,
                 COUNT(DISTINCT i.id_aliment) as total_ingredients
             FROM recettes r
             JOIN ingredients i ON r.id_recette = i.id_recette
+            JOIN aliments a ON i.id_aliment = a.id_aliment
         ";
     
         if ($excludedPlaceholders) {
@@ -122,8 +129,44 @@ class SearchModel {
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
     
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = $this->addIngredients($res);
+        $res = $this->addImagePath($res);
+
+        return $res;
     }
+
+    private function addIngredients($res) {
+        $query = "SELECT a.*, i.* FROM aliments a JOIN ingredients i ON a.id_aliment = i.id_aliment JOIN recettes r ON i.id_recette = r.id_recette";
+        $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+            $res2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $res3 = [];
+            foreach ($res as $r) {
+                $aliments = [];
+                foreach ($res2 as $r2) {
+                    if ($r['id_recette'] == $r2['id_recette']) {
+                        $aliments[] = $r2['nom'];
+                    }
+                }
+                $r['aliments'] = $aliments;
+                $res3[] = $r;
+            }
+
+        return $res3;
+    }
+
+    private function addImagePath($res) {
+        for ($i=0; $i < sizeof($res); $i++) { 
+            $res[$i]['image'] = Utils::getImage($res[$i]['nom']);
+        }
+
+        return $res;
+    }
+
+
     
     /**
      * Recherche les ingrédients en fonction d'un terme

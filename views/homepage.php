@@ -14,9 +14,11 @@
                 <a href="/recherche" class="bg-blue-500 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-blue-600">
                     Chercher des recettes
                 </a>
+                <?php if (!isset($_SESSION['login'])): ?>
                 <a href="/connect" class="bg-green-500 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-green-600">
                     Se connecter
                 </a>
+                <?php endif; ?>
                 <a href="/panier" class="bg-yellow-500 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-yellow-600">
                     Enregistrer des recettes
                 </a>

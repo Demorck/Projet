@@ -94,7 +94,7 @@ class ConnectionController {
         $pdo = $db->getConnection();
         $db->connectToDatabase();
 
-        $sql = "INSERT INTO utilisateurs (login, password, nom, prenom, genre, email) VALUES (:login, :password, :nom, :prenom, :genre, :email)";
+        $sql = "INSERT INTO utilisateurs (login, password, nom, prenom, genre, email, adresse, code_postal, ville) VALUES (:login, :password, :nom, :prenom, :genre, :email, :adresse, :code_postal, :ville)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':login', $_POST['login']);
         $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -103,6 +103,9 @@ class ConnectionController {
         $stmt->bindParam(':prenom', $_POST['first_name']);
         $stmt->bindParam(':genre', $_POST['gender']);
         $stmt->bindParam(':email', $_POST['email']);
+        $stmt->bindParam(':adresse', $_POST['adresse']);
+        $stmt->bindParam(':code_postal', $_POST['zipcode']);
+        $stmt->bindParam(':ville', $_POST['ville']);
         $stmt->execute();
     }
 
