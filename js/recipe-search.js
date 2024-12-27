@@ -219,7 +219,6 @@ class RecipeSearch {
         });
 
         let res = await response.json();
-        console.log(res.path != null);
         
         if (res.path != null) {
             res.nom = res.path + ' > ' + res.nom;
@@ -257,8 +256,6 @@ class RecipeSearch {
 
         this.includedIngredients = this.includedIngredients.filter(i => i.id_aliment !== res.id_aliment);
         this.excludedIngredients = this.excludedIngredients.filter(i => i.id_aliment !== res.id_aliment);
-
-        console.log(this.includedIngredients);
         
         this.updateTags();
     }
@@ -266,13 +263,10 @@ class RecipeSearch {
     uncheckCheckbox(name) {
         name = name.trim();
         name = name.split(' > ').pop();
-        console.log(name);
         
         let checkboxes = document.querySelectorAll('input[name="' + name + '"]');
         checkboxes.forEach((checkbox) => {
             checkbox.checked = false;
-            console.log(checkbox);
-            
         });
     }
 
@@ -290,7 +284,6 @@ class RecipeSearch {
         const excludedDiv = this.container.querySelector('#excludedTags');
 
         includedDiv.innerHTML = this.generateTags(this.includedIngredients, 'included');
-        console.log(this.includedIngredients);
         
         excludedDiv.innerHTML = this.generateTags(this.excludedIngredients, 'excluded');
 
@@ -368,8 +361,6 @@ class RecipeSearch {
             recipe.total_ingredients = 1;
             recipe.matched_ingredients = 1;
         }
-
-        console.log(recipe);
         
         let score = (recipe.matched_ingredients / recipe.total_ingredients * 100).toFixed(1);
         let oneToTen = 10 - Math.round(score / 10);
@@ -544,13 +535,17 @@ class RecipeSearch {
         // Mettre à jour l'affichage
         scoredRecettes.forEach(({ recette, score }) => {
             const scoreElement = recette.querySelector('p');
+            let oneToTen = 10 - Math.round(score / 10);
+
             scoreElement.textContent = 'Score: ' + score + '%';
     
             // Cacher les recettes avec un score négatif
             if (score <= 0) {
                 recette.style.display = 'none';
+                recette.classList.remove('border-color-range-1', 'border-color-range-2', 'border-color-range-3', 'border-color-range-4', 'border-color-range-5', 'border-color-range-6', 'border-color-range-7', 'border-color-range-8', 'border-color-range-9', 'border-color-range-10');
             } else {
                 recette.style.display = 'flex';
+                recette.classList.add('border-color-range-' + oneToTen);
             }
         });
     

@@ -30,5 +30,7 @@ $router->post('/register', App\Controllers\ConnectionController::class, 'registe
 $router->post('/login', App\Controllers\ConnectionController::class, 'login');
 $router->get('/session', App\Controllers\ConnectionController::class, 'getSession');
 $router->get('/panier', App\Controllers\FavoriteController::class, 'index');
+$router->get('/compte', App\Controllers\AccountController::class, 'index');
+$router->post('/change', App\Controllers\AccountController::class, 'changeInformations');
 
 $router->run();

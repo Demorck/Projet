@@ -2,6 +2,8 @@
 
 namespace App\Router;
 
+use App\Helpers\View;
+
 /**
  * Class Router qui permet de gérer les routes
  * 
@@ -84,7 +86,7 @@ class Router {
 
         // TODO: Mettre une route pour l'erreur 404
         http_response_code(404);
-        echo '404 Not Found (router)';
+        View::render('homepage', ['title' => '404 Not Found']);
     }
 
     /**

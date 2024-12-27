@@ -19,9 +19,11 @@
                     Se connecter
                 </a>
                 <?php endif; ?>
+                <?php if (isset($_SESSION['login'])): ?>
                 <a href="/panier" class="bg-yellow-500 text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-yellow-600">
                     Enregistrer des recettes
                 </a>
+                <?php endif; ?>
             </div>
         </div>
 

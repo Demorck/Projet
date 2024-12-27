@@ -72,11 +72,7 @@ class SearchModel {
      * @return array
      */
     public function searchRecipes($included, $excluded) {
-        $includedIds = $this->getAllIngredients($included);
-    
-        $excludedIds = $this->getAllIngredients($excluded);
-    
-        if (empty($includedIds)) {
+        if (empty($included) && empty($excluded)) {
             $query = "SELECT r.* FROM recettes r";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
@@ -87,11 +83,38 @@ class SearchModel {
 
             return $res;
         }
+
+
+
+        $includedIds = $this->getAllIngredients($included);
+    
+        $excludedIds = $this->getAllIngredients($excluded);
+    
+        
     
 
         $includedPlaceholders = implode(',', array_fill(0, count($includedIds), '?'));
         $excludedPlaceholders = !empty($excludedIds) ? implode(',', array_fill(0, count($excludedIds), '?')) : null;
     
+        if (empty($included)) {
+            $query = "SELECT r.* FROM recettes r WHERE NOT EXISTS (
+                    SELECT 1 FROM ingredients i2 
+                    WHERE i2.id_recette = r.id_recette 
+                    AND i2.id_aliment IN ($excludedPlaceholders)
+                )";
+
+            $params = $excludedIds;
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute($params);
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $res = $this->addIngredients($res);
+            $res = $this->addImagePath($res);
+
+            return $res;
+        }
+
+
         $query = "
             SELECT r.*,
                 COUNT(DISTINCT CASE WHEN i.id_aliment IN ($includedPlaceholders) 

@@ -32,7 +32,8 @@
                         <input type="text" id="searchInput" placeholder="Rechercher un ingrédient..." autocomplete="off" data-type="false">
                         <div id="suggestions" class="suggestions"></div>
                     </div>
-                </div><br>
+                </div>
+                <p>Clique droit pour ajouter un ingrédient exclu. Clique gauche pour l'inclure. La petite flèche permet de passer de l'un à l'autre.</p>
                 <hr>
                 <div class="ingredients-container flex flex-row gap-6 items-start justify-center">
                     <div id="includedTags-container" class="tags w-1/2">
